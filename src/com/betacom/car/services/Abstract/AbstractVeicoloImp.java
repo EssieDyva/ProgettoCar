@@ -10,95 +10,89 @@ import com.betacom.car.singleton.CarSingleton;
 
 public abstract class AbstractVeicoloImp implements VeicoliInt {
 
-    @Override
-    public Veicoli execute(String[] lS) throws VeicoliException {
-        
-        System.out.println("Inizio veicoloAbs execute...");
+	@Override
+	public Veicoli execute(String[] lS) throws VeicoliException {
 
-        if (lS == null || lS.length < 2) {
-            throw new VeicoliException("Input non valido o riga incompleta");
-        }
+		System.out.println("Inizio veicoloAbs execute...");
 
-        Map<String, String> mappa = new HashMap<>();
-        for (Integer i = 2; i < lS.length; i++) {
-            String[] elem = lS[i].split("=");
-            if (elem.length == 2) {
-                mappa.put(elem[0].trim(), elem[1].trim());
-            }
-        }
+		if (lS == null || lS.length < 2) {
+			throw new VeicoliException("Input non valido o riga incompleta");
+		}
 
-        try {
-            Integer id = CarSingleton.getInstance().computeId();
-            
-            Veicoli v = creaVeicolo(
-                id, 
-                mappa.get("tipoVeicolo"), 
-                mappa.get("numeroRuote") != null ? Integer.parseInt(mappa.get("numeroRuote")) : 0, 
-                mappa.get("tipoAlimentazione"), 
-                mappa.get("categoria"), 
-                mappa.get("colore"), 
-                mappa.get("marca"), 
-                mappa.get("annoProduzione") != null ? Integer.parseInt(mappa.get("annoProduzione")) : 0, 
-                mappa.get("modello"), 
-                mappa
-            );
+		Map<String, String> mappa = null;
+		mappa = loadMap(lS);
 
-            if (v != null) {
-                return controlExecute(v, mappa); 
-            } else {
-                return null; 
-            }
+		try {
+			Integer id = CarSingleton.getInstance().computeId();
 
-        } catch (NumberFormatException e) {
-            throw new VeicoliException("Errore nel formato dei numeri (ruote o anno)");
-        } catch (Exception e) {
-            throw new VeicoliException(e.getMessage());
-        }
-    }
+			if (controlParams(mappa)) {  
+				return creaVeicolo(id, mappa.get("tipoVeicolo"),
+						mappa.get("numeroRuote") != null ? Integer.parseInt(mappa.get("numeroRuote")) : 0,
+						mappa.get("tipoAlimentazione"), mappa.get("categoria"), mappa.get("colore"), mappa.get("marca"),
+						mappa.get("annoProduzione") != null ? Integer.parseInt(mappa.get("annoProduzione")) : 0,
+						mappa.get("modello"), mappa);
+			} else {
+				return null;
+			}
 
-    protected Veicoli controlExecute(Veicoli vei, Map<String, String> params) throws Exception {
+		} catch (NumberFormatException e) {
+			throw new VeicoliException("Errore nel formato dei numeri");
+		} catch (Exception e) {
+			throw new VeicoliException(e.getMessage());
+		}
+	}
 
-        try {
-            vei.setNumeroRuote(Integer.parseInt(params.get("numeroRuote")));            
-        } catch (Exception e) {
-            throw new Exception("Numero ruote non valido o mancante");
-        }
-        
-        if (!CarSingleton.getInstance().isValidValue("alim", params.get("tipoAlimentazione")))
-            throw new Exception("Tipo alimentazione '" + params.get("tipoAlimentazione") + "' non valida");
-        vei.setTipoAlimentazione(params.get("tipoAlimentazione"));
-        
-        if (!CarSingleton.getInstance().isValidValue("cat", params.get("categoria")))
-            throw new Exception("Categoria '" + params.get("categoria") + "' non valida");
-        vei.setCategoria(params.get("categoria"));
+	protected Boolean controlParams(Map<String, String> params) throws Exception {
 
-        if (!CarSingleton.getInstance().isValidValue("colore", params.get("colore")))
-            throw new Exception("Colore '" + params.get("colore") + "' non valido");
-        vei.setColore(params.get("colore"));
+		try {
+			int nRuote = Integer.parseInt(params.get("numeroRuote"));
+			if (nRuote != 4) {
+				throw new Exception("Anno " + nRuote + " nRuote sbagliato");
+			}
+		} catch (NumberFormatException e) {
+			throw new Exception("ruote non numeriche");
+		}
 
-        if (!CarSingleton.getInstance().isValidValue("marca", params.get("marca")))
-            throw new Exception("Marca '" + params.get("marca") + "' non valida");
-        vei.setMarca(params.get("marca"));
+		try {
+			int anno = Integer.parseInt(params.get("annoProduzione"));
+			if (anno < 2000 || anno > 2026) {
+				throw new Exception("Anno " + anno + " fuori range consentito (2000-2026)");
+			}
+		} catch (NumberFormatException e) {
+			throw new Exception("Anno produzione non numerico");
+		}
 
-        try {
-            int anno = Integer.parseInt(params.get("annoProduzione"));
-            if (anno < 2000 || anno > 2026) {
-                throw new Exception("Anno " + anno + " fuori range consentito (2000-2026)");
-            }
-            vei.setAnnoProduzione(anno);
-        } catch (NumberFormatException e) {
-            throw new Exception("Anno produzione non numerico");
-        }
-        
-        vei.setModello(params.get("modello"));
-        
-        return vei;
-    }
+		CheckParamSingleton(params);
+		return true;
+	}
 
-    protected abstract Veicoli creaVeicolo(
-        Integer id, String tipoVeicolo, Integer numeroRuote, 
-        String tipoAlimentazione, String categoria, String colore, 
-        String marca, Integer annoProduzione, String modello, 
-        Map<String, String> mappa
-    );
+	protected Map<String, String> loadMap(String[] lS) {
+
+		Map<String, String> mappa = new HashMap<String, String>();
+
+		for (Integer i = 2; i < lS.length; i++) {
+			String[] elem = lS[i].split("=");
+			if (elem.length == 2) {
+				mappa.put(elem[0].trim(), elem[1].trim());
+			}
+		}
+		return mappa;
+	}
+
+	protected void CheckParamSingleton(Map<String, String> params) throws Exception {
+		CheckValid("alim", "tipoAlimentazione", params);
+		CheckValid("cat", "categoria", params);
+		CheckValid("colore", "colore", params);
+		CheckValid("marca", "marca", params);
+	}
+
+	protected void CheckValid(String s, String stringMap, Map<String, String> params) throws Exception {
+
+		if (!CarSingleton.getInstance().isValidValue(s, params.get(stringMap)))
+			throw new Exception(s + " " + params.get("s") + " non valida");
+	}
+
+	protected abstract Veicoli creaVeicolo(Integer id, String tipoVeicolo, Integer numeroRuote,
+			String tipoAlimentazione, String categoria, String colore, String marca, Integer annoProduzione,
+			String modello, Map<String, String> mappa);
 }
