@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.betacom.car.exceptions.VeicoliException;
+import com.betacom.car.utils.FileProcess;
 
 public class CarSingleton {
 
@@ -18,6 +19,10 @@ public class CarSingleton {
 	Map<String, String[]> controlli = new HashMap<String, String[]>();
 	
 	private Integer id = 0;
+	
+	FileProcess utils= new FileProcess();
+	
+	
 	private CarSingleton() {
 		loadConstant();
 	}
@@ -50,12 +55,9 @@ public class CarSingleton {
 	}
 	
 	public void loadConstant() {
+		FileProcess utils= new FileProcess();
 		List<String> cons = new ArrayList<String>();
-		cons.add("alim=benzina,diesel,elettrica,ibrida,manuale");
-		cons.add("cat=strada,fuoristrada,suv,mtb,cross");
-		cons.add("colore=bianco,nero,verde,giallo,marrone,rosso");
-		cons.add("marca=Fiat,Renault,BMW,Tesla,Bianchi,Yamaha,Mercedes,Tecnizer");
-		cons.add("sospensione=senza,mono,");
+		cons=utils.readFile("/Users/Betacom/git/ProgettoCar/src/FileInSingleton");
 		
 		for (String it:cons) {
 			String [] el = it.split("=");
