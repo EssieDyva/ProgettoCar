@@ -47,7 +47,7 @@ public abstract class AbstractVeicoloImp implements VeicoliInt {
 		try {
 			int nRuote = Integer.parseInt(params.get("numeroRuote"));
 			if (nRuote != 4) {
-				throw new Exception("Anno " + nRuote + " nRuote sbagliato");
+				throw new Exception("Ruote " + nRuote + " nRuote sbagliato");
 			}
 		} catch (NumberFormatException e) {
 			throw new Exception("ruote non numeriche");

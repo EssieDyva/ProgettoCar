@@ -1,5 +1,8 @@
 package com.betacom.car.process;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,15 +17,18 @@ import com.betacom.car.services.interfaces.VeicoliInt;
 
 public class StartCar {
 	
-	public void execute(List<String> params) throws Exception{
+	public void execute(String path) throws Exception{
 		
 		System.out.println("inizio startcar");
 		
+		List<String> params = new ArrayList<String>();
 		Map<String, VeicoliInt> mappaImp = new HashMap<String, VeicoliInt>();
 		Map<Integer, Veicoli> mappaVei=new HashMap<Integer, Veicoli>();
 		mappaImp.put("macchina", new MacchinaImplementation());
 		mappaImp.put("moto", new MotoImplementation());
 		mappaImp.put("bici", new BiciImplementation());
+		
+		params=readFile(path);
 		
 		for(String riga:params) {
 			
@@ -64,6 +70,22 @@ public class StartCar {
 		
 		String filtro="macchina";
 		stampa(filtro, mappaVei);
+	}
+	
+	private List<String> readFile(String path) {
+		List<String> r = new ArrayList<String>();
+
+		try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+			String line = reader.readLine();
+			while (line != null) {
+				r.add(line);
+				line = reader.readLine();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return r;
 	}
 	
 	public void stampa(String filtro, Map<Integer, Veicoli> mappaVei) {
