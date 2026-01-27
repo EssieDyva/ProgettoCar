@@ -14,6 +14,7 @@ import com.betacom.car.services.implementation.BiciImplementation;
 import com.betacom.car.services.implementation.MacchinaImplementation;
 import com.betacom.car.services.implementation.MotoImplementation;
 import com.betacom.car.services.interfaces.VeicoliInt;
+import com.betacom.car.utils.FileProcess;
 
 public class StartCar {
 	
@@ -28,7 +29,9 @@ public class StartCar {
 		mappaImp.put("moto", new MotoImplementation());
 		mappaImp.put("bici", new BiciImplementation());
 		
-		params=readFile(path);
+		FileProcess utils= new FileProcess();
+		
+		params=utils.readFile(path);
 		
 		for(String riga:params) {
 			
@@ -70,22 +73,6 @@ public class StartCar {
 		
 		String filtro="macchina";
 		stampa(filtro, mappaVei);
-	}
-	
-	private List<String> readFile(String path) {
-		List<String> r = new ArrayList<String>();
-
-		try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
-			String line = reader.readLine();
-			while (line != null) {
-				r.add(line);
-				line = reader.readLine();
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return r;
 	}
 	
 	public void stampa(String filtro, Map<Integer, Veicoli> mappaVei) {
