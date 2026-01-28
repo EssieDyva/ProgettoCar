@@ -19,7 +19,7 @@ public class MainCar {
 		System.out.println("inizio");
 		
 		StartCar engine= new StartCar();
-		engine.execute("/Users/Betacom/git/ProgettoCar/src/FileInVeicoli");
+		engine.execute("src/FileInVeicoli");
 		/*
 		 * tipo di input format.
 		 * add,macchina,marca=fiat,modello=panda,cat=cita,colore=bianca..... 

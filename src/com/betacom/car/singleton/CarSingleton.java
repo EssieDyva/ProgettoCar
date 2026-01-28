@@ -57,13 +57,13 @@ public class CarSingleton {
 	public void loadConstant() {
 		FileProcess utils= new FileProcess();
 		List<String> cons = new ArrayList<String>();
-		cons=utils.readFile("/Users/Betacom/git/ProgettoCar/src/FileInSingleton");
+		cons=utils.readFile("src/FileInSingleton");
 		
-		for (String it:cons) {
+		cons.forEach(it -> {
 			String [] el = it.split("=");
 			String [] elP = el[1].split(",");
-			controlli.put(el[0], elP);			
-		}
+			controlli.put(el[0], elP);	
+		});
 	}
 	
 	public boolean isValidValue(String key, String value) {

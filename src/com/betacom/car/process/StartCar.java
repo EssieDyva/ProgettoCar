@@ -31,7 +31,7 @@ public class StartCar {
 		
 		params=utils.readFile(path);
 		
-		for(String riga:params) {
+		params.forEach(riga -> {
 			
 			String[]elementi=riga.split(",");
 			Veicoli v=null;
@@ -51,7 +51,7 @@ public class StartCar {
 				} catch (Exception e) {
 					System.out.println("Abnomal end:" + e.getMessage());
 					e.printStackTrace();
-			}
+				}
 				
 			} else {
 				System.out.println("veicolo non previsto");
@@ -67,13 +67,20 @@ public class StartCar {
 			} catch (Exception e) {
 				System.out.println("Errore in startCar");
 			}
-		}
+		});
 		
-		String filtro="macchina";
-		stampa(filtro, mappaVei);
-
-		String filePath = "/Users/Betacom/git/ProgettoCar/src/FileOut.txt";
-		utils.writeFile(filePath, mappaVei, true);
+		String filtro=null;
+//		stampa(filtro, mappaVei);
+//
+//		String filePath = "src/FileOut.txt";
+//		utils.writeFile(filePath, mappaVei, true);
+		
+		mappaVei.entrySet().stream()
+		.filter(i -> i.getValue().getColore().equals(filtro) || filtro == null)
+//		.filter(i -> i.getValue().getAnnoProduzione().equals("as") && filtro != null)
+//		.filter(i -> i.getValue().getMarca().equals(""))
+		.forEach(it -> System.out.println(it.getValue().toString()));
+		
 	}
 	
 	public void stampa(String filtro, Map<Integer, Veicoli> mappaVei) {
@@ -82,4 +89,5 @@ public class StartCar {
             System.out.println("Stampa con filtro -- key: " + it.getKey() + " value: " + it.getValue().toString());
         }
 	}
+	
 }
