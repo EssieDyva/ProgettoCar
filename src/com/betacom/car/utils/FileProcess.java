@@ -1,7 +1,7 @@
 package com.betacom.car.utils;
 
 import java.io.BufferedReader;
-import java.io.File;
+import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -29,27 +29,23 @@ public class FileProcess {
 		}
 		return r;
 	}
-
-	public void writeFile(String path, Map<Integer, Veicoli> mappaVei) {
-		File f = new File(path);
-		if (f.exists()) {
-			System.out.println("File " + path + " exists");
-			f.delete();
-		}
-
-		FileWriter o = null;
-
+	
+	public void writeFile(String path, Map<Integer, Veicoli> mappaVei, boolean mode) {
+		BufferedWriter o = null;
+		
 		try {
-			o = new FileWriter(f);
-
+			o = new BufferedWriter(new FileWriter(path, mode));
+			
 			for (Entry<Integer, Veicoli> it : mappaVei.entrySet()) {
 				o.write("Stampa con filtro -- key: " + it.getKey() + " value: " + it.getValue().toString());
+				o.newLine();
 			}
-
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
 			try {
+				o.flush();
 				o.close();
 			} catch (IOException e) {
 				e.printStackTrace();

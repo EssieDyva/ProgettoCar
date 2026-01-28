@@ -73,7 +73,7 @@ public class StartCar {
 		stampa(filtro, mappaVei);
 
 		String filePath = "/Users/Betacom/git/ProgettoCar/src/FileOut.txt";
-		utils.writeFile(filePath, mappaVei);
+		utils.writeFile(filePath, mappaVei, true);
 	}
 	
 	public void stampa(String filtro, Map<Integer, Veicoli> mappaVei) {
