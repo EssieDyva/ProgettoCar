@@ -46,7 +46,7 @@ public abstract class AbstractVeicoloImp implements VeicoliInt {
 
 		try {
 			int nRuote = Integer.parseInt(params.get("numeroRuote"));
-			if (nRuote != 4) {
+			if (nRuote == 0) {
 				throw new Exception("Ruote " + nRuote + " nRuote sbagliato");
 			}
 		} catch (NumberFormatException e) {
@@ -95,4 +95,6 @@ public abstract class AbstractVeicoloImp implements VeicoliInt {
 	protected abstract Veicoli creaVeicolo(Integer id, String tipoVeicolo, Integer numeroRuote,
 			String tipoAlimentazione, String categoria, String colore, String marca, Integer annoProduzione,
 			String modello, Map<String, String> mappa);
+	
+	
 }

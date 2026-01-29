@@ -43,6 +43,12 @@ public class Macchina extends Veicoli{
 				+ ", getColore()=" + getColore() + ", getMarca()=" + getMarca() + ", getAnnoProduzione()="
 				+ getAnnoProduzione() + ", getModello()=" + getModello() + "]";
 	}
-
 	
+	@Override
+	public String generaStringaFiltro() {
+	    return super.generaStringaFiltro() + 
+	           ",numeroPorte=" + numeroPorte + 
+	           ",targa=" + targa + 
+	           ",cc=" + cc;
+	}
 }

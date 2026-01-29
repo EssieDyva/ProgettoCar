@@ -1,6 +1,7 @@
 package com.betacom.car.process;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,9 +29,7 @@ public class StartCar {
 		mappaImp.put("bici", new BiciImplementation());
 		
 		FileProcess utils= new FileProcess();
-		
 		params=utils.readFile(path);
-		
 		params.forEach(riga -> {
 			
 			String[]elementi=riga.split(",");
@@ -69,18 +68,40 @@ public class StartCar {
 			}
 		});
 		
-		String filtro=null;
-//		stampa(filtro, mappaVei);
-//
-//		String filePath = "src/FileOut.txt";
-//		utils.writeFile(filePath, mappaVei, true);
+		List<String> paramFileFiltro = utils.readFile("src/FileFiltro");
+		Map<String, String> mappaCriteri = new HashMap<>();
+
+		if (!paramFileFiltro.isEmpty()) {
+		    Arrays.stream(paramFileFiltro.get(0).split(","))
+		        .forEach(p -> {
+		            String[] coppia = p.split("=");
+		            if (coppia.length == 2) {
+		                mappaCriteri.put(coppia[0].trim(), coppia[1].trim());
+		            }
+		        });
+		}
 		
+		mappaVei.values().stream()
+	    .filter(i -> {
+	        if (mappaCriteri.isEmpty()) return true;
+	        String infoVeicolo = i.generaStringaFiltro(); 
+	        return mappaCriteri.entrySet().stream()
+	        		.allMatch(c -> infoVeicolo.contains(c.getKey() + "=" + c.getValue()));
+	    })
+	    .forEach(i -> System.out.println(i.toString()));
+		
+		/*
+		String filtro="2009";
+		stampa(filtro, mappaVei);
+		String filePath = "src/FileOut.txt";
+		utils.writeFile(filePath, mappaVei, true);
 		mappaVei.entrySet().stream()
 		.filter(i -> i.getValue().getColore().equals(filtro) || filtro == null)
-//		.filter(i -> i.getValue().getAnnoProduzione().equals("as") && filtro != null)
-//		.filter(i -> i.getValue().getMarca().equals(""))
-		.forEach(it -> System.out.println(it.getValue().toString()));
-		
+		.filter(i -> i.getValue().getTipoAlimentazione().equals(filtro) || filtro == null)
+		.filter(i -> String.valueOf(i.getValue().getAnnoProduzione()).equals(filtro) || filtro == null)
+		.filter(i -> i.getValue().getMarca().equals(""))
+		.forEach(i -> System.out.println(i.getValue().toString()));
+		*/
 	}
 	
 	public void stampa(String filtro, Map<Integer, Veicoli> mappaVei) {
@@ -89,5 +110,4 @@ public class StartCar {
             System.out.println("Stampa con filtro -- key: " + it.getKey() + " value: " + it.getValue().toString());
         }
 	}
-	
 }

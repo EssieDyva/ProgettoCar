@@ -99,4 +99,15 @@ public class Veicoli {
 		this.modello = modello;
 	}
 	
+	public String generaStringaFiltro() {
+	    return ",tipoVeicolo=" + tipoVeicolo + 
+	           ",numeroRuote=" + numeroRuote + 
+	           ",tipoAlimentazione=" + tipoAlimentazione + 
+	           ",categoria=" + categoria + 
+	           ",colore=" + colore + 
+	           ",marca=" + marca + 
+	           ",annoProduzione=" + annoProduzione + 
+	           ",modello=" + modello;		
+	}
+	
 }
