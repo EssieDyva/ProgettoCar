@@ -1,5 +1,6 @@
 package com.betacom.car.process;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -14,6 +15,8 @@ import com.betacom.car.services.implementation.MacchinaImplementation;
 import com.betacom.car.services.implementation.MotoImplementation;
 import com.betacom.car.services.interfaces.VeicoliInt;
 import com.betacom.car.utils.FileProcess;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class StartCar {
 	
@@ -80,6 +83,7 @@ public class StartCar {
 		            }
 		        });
 		}
+		Gson json = new GsonBuilder().setPrettyPrinting().create();
 		
 		mappaVei.values().stream()
 	    .filter(i -> {
@@ -88,7 +92,13 @@ public class StartCar {
 	        return mappaCriteri.entrySet().stream()
 	        		.allMatch(c -> infoVeicolo.contains(c.getKey() + "=" + c.getValue()));
 	    })
-	    .forEach(i -> System.out.println(i.toString()));
+	    .forEach(i -> {
+	    	String jsonString = json.toJson(i);
+	    	System.out.println("--- Veicolo formato JSON ---");
+	    	System.out.println(jsonString);
+//	    	Type type = new TypeToken<List<>>() {}.getType(); // retrieve correct type
+//			List<ObjectJson> lUser1 = json.fromJson(jsonString, type);
+	    });
 		
 		/*
 		String filtro="2009";
