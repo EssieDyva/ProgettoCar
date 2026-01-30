@@ -96,6 +96,9 @@ public class StartCar {
 	    	String jsonString = json.toJson(i);
 	    	System.out.println("--- Veicolo formato JSON ---");
 	    	System.out.println(jsonString);
+	    	
+	    utils.writeFile("src/FileOutJson", jsonString, true);
+	    
 //	    	Type type = new TypeToken<List<>>() {}.getType(); // retrieve correct type
 //			List<ObjectJson> lUser1 = json.fromJson(jsonString, type);
 	    });
