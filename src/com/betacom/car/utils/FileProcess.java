@@ -29,18 +29,40 @@ public class FileProcess {
 		}
 		return r;
 	}
-	
+
 	public void writeFile(String path, Map<Integer, Veicoli> mappaVei, boolean mode) {
 		BufferedWriter o = null;
-		
+
 		try {
 			o = new BufferedWriter(new FileWriter(path, mode));
-			
+
 			for (Entry<Integer, Veicoli> it : mappaVei.entrySet()) {
 				o.write("Stampa con filtro -- key: " + it.getKey() + " value: " + it.getValue().toString());
 				o.newLine();
 			}
-			
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				o.flush();
+				o.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void writeFile(String path, String veicolo, boolean mode) {
+		BufferedWriter o = null;
+
+		try {
+			o = new BufferedWriter(new FileWriter(path, mode));
+
+			o.write("Stampa JSON: " + veicolo);
+			o.newLine();
+
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
